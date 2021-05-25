@@ -3,11 +3,20 @@ const bodyParser = require("body-parser");
 
 const app = express();
 
+// access public folder
+app.use(express.static('public'));
+
 // parse requests of content-type: application/json
 app.use(bodyParser.json());
 
 // parse requests of content-type: application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use((req, res, next) => {
+    // To avoid CORS problems
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    next();
+})
 
 // simple route
 app.get("/", (req, res) => {

@@ -1,21 +1,23 @@
 module.exports = app => {
     const image = require("./image.controller");
 
-    // Create a new Customer
+    // Create a new image
     app.post("/image", image.create);
 
-    // Retrieve all Customers
-    app.get("/image", image.findAll);
+    // Retrieve all images
+    app.get("/neutre", image.findNeutre);
 
-    // Retrieve a single Customer with customerId
+    app.get("/singuliere", image.findSinguliere);
+
+    // Retrieve a single image with imageId
     app.get("/image/:imageId", image.findOne);
 
-    // Update a Customer with customerId
+    // Update a image with imageId
     app.put("/image/:imageId", image.update);
 
-    // Delete a Customer with customerId
+    // Delete a image with imageId
     app.delete("/image/:imageId", image.delete);
 
-    // Create a new Customer
+    // Create a new image
     app.delete("/image", image.deleteAll);
 };

@@ -39,8 +39,23 @@ Image.findById = (imageId, result) => {
     });
 };
 
-Image.getAll = result => {
-    sql.query("SELECT * FROM image", (err, res) => {
+Image.getNeutre = result => {
+    // requête pour les images neutres
+    sql.query("SELECT * FROM image WHERE type_image = 0 ORDER BY RAND() LIMIT 7;", (err, res) => {
+        if (err) {
+            console.log("error: ", err);
+            result(null, err);
+            return;
+        }
+
+        console.log("Images: ", res);
+        result(null, res);
+    });
+};
+
+Image.getSinguliere = result => {
+    // requête pour les images sing
+    sql.query("SELECT * FROM image WHERE type_image = 1 ORDER BY RAND() LIMIT 1;", (err, res) => {
         if (err) {
             console.log("error: ", err);
             result(null, err);
@@ -54,7 +69,7 @@ Image.getAll = result => {
 
 Image.updateById = (id, image, result) => {
     sql.query(
-        "UPDATE customers SET email = ?, name = ?, active = ? WHERE id = ?",
+        "UPDATE image SET chemin = ?, indice = ?, type_image = ? WHERE id = ?",
         [image.chemin, image.indice, image.type_image, id],
         (err, res) => {
             if (err) {

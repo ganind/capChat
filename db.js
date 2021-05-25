@@ -1,5 +1,5 @@
 const mysql = require("mysql2");
-const dbConfig = require("./db.config.js");
+const dbConfig = require("./db.config");
 
 // Création de connexion à la bdd
 const connection = mysql.createConnection({

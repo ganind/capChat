@@ -28,16 +28,29 @@ exports.create = (req, res) => {
 };
 
 // Retrieve all images from the database.
-exports.findAll = (req, res) => {
-    Image.getAll((err, data) => {
+exports.findNeutre = (req, res) => {
+    Image.getNeutre((err, data) => {
         if (err)
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while retrieving customers."
+                    err.message || "Some error occurred while retrieving images."
             });
         else res.send(data);
     });
 };
+
+// Retrieve all images from the database.
+exports.findSinguliere = (req, res) => {
+    Image.getSinguliere((err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while retrieving images."
+            });
+        else res.send(data);
+    });
+};
+
 
 // Find a single image with a imageId
 exports.findOne = (req, res) => {
@@ -56,7 +69,7 @@ exports.findOne = (req, res) => {
     });
 };
 
-// Update a image identified by the customerId in the request
+// Update a image identified by the imageId in the request
 exports.update = (req, res) => {
     // Validate Request
     if (!req.body) {
