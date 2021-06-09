@@ -18,6 +18,6 @@ module.exports = app => {
     // Delete a image with imageId
     app.delete("/image/:imageId", image.delete);
 
-    // Create a new image
+    // Delete all images
     app.delete("/image", image.deleteAll);
 };

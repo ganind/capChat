@@ -1,11 +1,25 @@
-let canvas;
-let i = 0;
+let indexSingulier = -1;
+let timer;
+let succes = false;
+let callback;
+
+function calculTimer() {
+    var someVarName = sessionStorage.getItem("nombreEchec");
+    if (someVarName !== null) {
+        var nombreEchec = parseInt(someVarName);
+        timer = 5 * nombreEchec;
+    } else {
+        timer = 0;
+    }
+}
 
 function callBackend() {
-    loadNeutre();
+    calculTimer();
+    fixSingulier();
     loadSinguliere();
+    loadNeutre();
     chrono();
-    setCanvas();
+    callback = getParameterByName('callback');
 }
 
 function loadNeutre() {
@@ -14,52 +28,25 @@ function loadNeutre() {
         let chemin;
         if (this.readyState === 4 && this.status === 200) {
             let data = JSON.parse(this.responseText);
-            let base_image = new Image();
-            chemin = data[0].chemin;
-            base_image.src = "http://localhost:3000/img/" + chemin;
-            base_image.onload = function () {
-                ctx.drawImage(base_image, 0, 0, 85, 100);
-            }
-            let base_image1 = new Image();
-            chemin = data[1].chemin;
-            base_image1.src = "http://localhost:3000/img/" + chemin;
-            base_image1.onload = function () {
-                ctx.drawImage(base_image1, 85, 0, 85, 100);
-            }
-            let base_image2 = new Image();
-            chemin = data[2].chemin;
-            base_image2.src = "http://localhost:3000/img/" + chemin;
-            base_image2.onload = function () {
-                ctx.drawImage(base_image2, 170, 0, 85, 100);
-            }
-            let base_image3 = new Image();
-            chemin = data[3].chemin;
-            base_image3.src = "http://localhost:3000/img/" + chemin;
-            base_image3.onload = function () {
-                ctx.drawImage(base_image3, 255, 0, 85, 100);
-            }
-            let base_image4 = new Image();
-            chemin = data[4].chemin;
-            base_image4.src = "http://localhost:3000/img/" + chemin;
-            base_image4.onload = function () {
-                ctx.drawImage(base_image4, 0, 100, 85, 100);
-            }
-            let base_image5 = new Image();
-            chemin = data[5].chemin;
-            base_image5.src = "http://localhost:3000/img/" + chemin;
-            base_image5.onload = function () {
-                ctx.drawImage(base_image5, 85, 100, 85, 100);
-            }
-            let base_image6 = new Image();
-            chemin = data[6].chemin;
-            base_image6.src = "http://localhost:3000/img/" + chemin;
-            base_image6.onload = function () {
-                ctx.drawImage(base_image6, 170, 100, 85, 100);
+            let indexJson = 0;
+            for (let i = 1; i <= 8; i++) {
+                if (i !== indexSingulier) {
+                    chemin = data[indexJson].chemin;
+                    document.getElementById(i.toString()).src = "http://localhost:3000/img/" + chemin;
+                    indexJson++;
+                }
             }
         }
     };
     xmlhttp.open("GET", "http://localhost:3000/neutre", true);
     xmlhttp.send();
+}
+function getRandomInt(max) {
+    return Math.floor(Math.random() * max);
+}
+
+function fixSingulier(){
+    indexSingulier = (getRandomInt(8)+1);
 }
 
 function loadSinguliere() {
@@ -75,7 +62,8 @@ function loadSinguliere() {
             chemin = data[0].chemin;
             base_image.src = "http://localhost:3000/img/" + chemin;
             base_image.onload = function () {
-                ctx.drawImage(base_image, 255, 100, 85, 100);
+                var mainImgs = document.getElementById(indexSingulier.toString());
+                mainImgs.src = base_image.src;
             }
             astuce = data[0].indice;
             document.getElementById("astuce").textContent = astuce;
@@ -86,54 +74,52 @@ function loadSinguliere() {
     xmlhttp.send();
 }
 
-function setCanvas() {
-     canvas = document.getElementById("captchaCanvas");
-     ctx = canvas.getContext("2d");
-     canvas.addEventListener('click', handleClick);
+function echec() {
+    var someVarName = sessionStorage.getItem("nombreEchec");
+    if (someVarName !== null) {
+        var nombreEchec = parseInt(someVarName);
+        nombreEchec++;
+        sessionStorage.setItem("nombreEchec", nombreEchec.toString());
+    } else {
+        sessionStorage.setItem("nombreEchec", "1");
+    }
+    window.location.reload(true); //refresh la page avec un nouveau captcha
 }
 
 // fonction pour le timer
 function chrono() {
-    i++;
-    document.form1.chrono.value = 60 - i; //compte à rebours d'une minute
-    if (i === 60) {
-        window.location.reload(true); //refresh la page avec un nouveau captcha
+    if (timer < 30) {
+        timer++;
+        document.form1.chrono.value = 30 - timer; //compte à rebours d'une minute
+        if (timer >= 30) {
+            echec();
+        }
+        setTimeout('chrono()', 1000); //en milliseconds
+    } else {
+        if (succes === false) {
+            alert("Chrono depassé ! Essayer plus tard !")
+        }
     }
-    setTimeout('chrono()', 1000); //en milliseconds
 }
 
-function getMousePos(c, evt) {
-    let rect = c.getBoundingClientRect();
-    return{
-        x: evt.clientX - rect.left,
-        y: evt.clientY - rect.top
-    };
+function alertOnScreen(id) {
+    if (id === indexSingulier.toString()) {
+        succes = true;
+        timer = 30;
+        window.location.replace(callback);
+    } else {
+        echec();
+    }
 }
 
-function handleClick(e) {
-    let pos = getMousePos(canvas, e);
-    posx = pos.x;
-    posy = pos.y;
-    alert(posx + " " + posy);
+function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, '\\$&');
+    var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, ' '));
 }
 
-function imageChosen(x,y) {
-    if (x < 85 && y < 100) {
-        return 1;
-    }
-    else if (x <= 170 && y < 100) {
-        return 2;
-    }
-    else if (x <= 255 && y < 100) {
-        return 3;
-    }
-    else if (x <= 85 && y >= 100) {
-        return 4;
-    }
-    else if (x <= 170 && y >= 100) {
-        return 5;
-    }
-    else if (x <= 255 && y >= 100) {
-        return 6;
-    }
-}
+
