@@ -1,7 +1,14 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 const app = express();
+
+var corsPtions = {
+    origin: "*"
+};
+
+app.use(cors(corsPtions));
 
 // access public folder
 app.use(express.static('public'));
@@ -24,7 +31,8 @@ app.get("/", (req, res) => {
     res.json({ message: "Bienvenue à CapChat." });
 });
 
-require("./image.routes")(app);
+require("./image/image.routes")(app);
+require("./artiste/artiste.routes")(app);
 
 // set port, listen for requests
 app.listen(3000, () => {

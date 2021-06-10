@@ -1,4 +1,4 @@
-const Image = require("./image.model");
+const Image = require("../image/image.model.js");
 
 // Create and Save a new image
 exports.create = (req, res) => {

@@ -1,5 +1,5 @@
 module.exports = app => {
-    const image = require("./image.controller");
+    const image = require("../image/image.controller");
 
     // Create a new image
     app.post("/image", image.create);
