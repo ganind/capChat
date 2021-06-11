@@ -10,10 +10,10 @@ module.exports = app => {
     // Retrieve a single artiste with artisteId
     app.get("/artistes/:artisteId", artistes.findOne);
 
-    // Update a artiste with artisteId
+    // Update an artiste with artisteId
     app.put("/artistes/:artisteId", artistes.update);
 
-    // Delete a artiste with artisteId
+    // Delete an artiste with artisteId
     app.delete("/artistes/:artisteId", artistes.delete);
 
     // Authentification of an Artist

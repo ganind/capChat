@@ -131,7 +131,7 @@ exports.uploadSingulier = (req, res) => {
         if (err)
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while removing all images."
+                    err.message || "Some error occurred while uploading singulières images."
             });
         else res.send({ message: `All images were uploaded successfully!` });
     })
@@ -141,7 +141,7 @@ exports.uploadNeutre = (req, res) => {
         if (err)
             res.status(500).send({
                 message:
-                    err.message || "Some error occurred while removing all images."
+                    err.message || "Some error occurred while uploading neutres images."
             });
         else res.send({ message: `All images were uploaded successfully!` });
     })
