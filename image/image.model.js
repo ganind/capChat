@@ -136,7 +136,7 @@ Image.uploadSingulier = (req, result) => {
 
         zipEntries.forEach(function (zipEntry) {
             console.log(zipEntry.toString()); // outputs zip entries information
-            sql.query(`INSERT INTO image (chemin, indice, artisteId, themeId, type_image) VALUES ('singuliers/${zipEntry.entryName}', "", 2, 2, 1)`)
+            sql.query(`INSERT INTO image (chemin, indice, artisteId, themeId, type_image) VALUES ('singuliers/${zipEntry.entryName}', "", 1, 1, 1)`)
         });
         zip.extractAllTo( "./public/img/singuliers",true);
         result();
@@ -153,7 +153,7 @@ Image.uploadNeutre = (req, result) => {
 
         zipEntries.forEach(function (zipEntry) {
             console.log(zipEntry.toString()); // outputs zip entries information
-            sql.query(`INSERT INTO image (chemin, indice, artisteId, themeId, type_image) VALUES ('neutres/${zipEntry.entryName}', "", 2, 2, 0)`)
+            sql.query(`INSERT INTO image (chemin, indice, artisteId, themeId, type_image) VALUES ('neutres/${zipEntry.entryName}', "", 1, 1, 0)`)
         });
         zip.extractAllTo( "./public/img/neutres",true);
 
