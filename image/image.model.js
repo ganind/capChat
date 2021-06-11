@@ -1,4 +1,8 @@
 const sql = require("../db.js");
+var formidable = require('formidable');
+var fs = require('fs');
+var AdmZip = require("adm-zip");
+
 
 // constructeur
 const Image = function (image) {
@@ -121,6 +125,41 @@ Image.removeAll = result => {
         result(null, res);
     });
 };
+
+Image.uploadSingulier = (req, result) => {
+    var form = new formidable.IncomingForm();
+    form.parse(req, function (err, fields, files) {
+        var oldpath = files.filetoupload.path; //Le formulaire est juste parsé
+        // reading archives
+        var zip = new AdmZip(oldpath);
+        var zipEntries = zip.getEntries(); // an array of ZipEntry records
+
+        zipEntries.forEach(function (zipEntry) {
+            console.log(zipEntry.toString()); // outputs zip entries information
+            sql.query(`INSERT INTO image (chemin, indice, artisteId, themeId, type_image) VALUES ('singuliers/${zipEntry.entryName}', "", 2, 2, 1)`)
+        });
+        zip.extractAllTo( "./public/img/singuliers",true);
+        result();
+    });
+}
+
+Image.uploadNeutre = (req, result) => {
+    var form = new formidable.IncomingForm();
+    form.parse(req, function (err, fields, files) {
+        var oldpath = files.filetoupload.path; //Le formulaire est juste parsé
+        // reading archives
+        var zip = new AdmZip(oldpath);
+        var zipEntries = zip.getEntries(); // an array of ZipEntry records
+
+        zipEntries.forEach(function (zipEntry) {
+            console.log(zipEntry.toString()); // outputs zip entries information
+            sql.query(`INSERT INTO image (chemin, indice, artisteId, themeId, type_image) VALUES ('neutres/${zipEntry.entryName}', "", 2, 2, 0)`)
+        });
+        zip.extractAllTo( "./public/img/neutres",true);
+
+        result();
+    });
+}
 
 module.exports = Image;
 

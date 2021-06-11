@@ -125,3 +125,26 @@ exports.deleteAll = (req, res) => {
         else res.send({ message: `All images were deleted successfully!` });
     });
 };
+
+exports.uploadSingulier = (req, res) => {
+    Image.uploadSingulier(req,(err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while removing all images."
+            });
+        else res.send({ message: `All images were uploaded successfully!` });
+    })
+}
+exports.uploadNeutre = (req, res) => {
+    Image.uploadNeutre(req,(err, data) => {
+        if (err)
+            res.status(500).send({
+                message:
+                    err.message || "Some error occurred while removing all images."
+            });
+        else res.send({ message: `All images were uploaded successfully!` });
+    })
+}
+
+

@@ -6,7 +6,7 @@ function submit() {
         if (this.readyState === 4 && this.status === 200) {
             let data = JSON.parse(this.responseText);
             if (data.length !== 0) {
-                alert("OK !!!!");
+                window.location.replace("/capchat/backOffice.html");
             } else {
                 alert("Mauvaise saisie. Réessayez !");
             }
@@ -31,7 +31,7 @@ function submitNewAccount() {
         if (this.readyState === 4 && this.status === 200) {
             let data = JSON.parse(this.responseText);
             if (data.length !== 0) {
-                alert("OK !!!!");
+                window.location.replace("/capchat/backOffice.html");
             } else {
                 alert("Mauvaise saisie du mot de passe. Réessayez !");
             }

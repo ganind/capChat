@@ -20,4 +20,10 @@ module.exports = app => {
 
     // Delete all images
     app.delete("/image", image.deleteAll);
+
+    // Upload files singuliers
+    app.post("/fileupload/singulier", image.uploadSingulier);
+
+    // Upload files neutres
+    app.post("/fileupload/neutre", image.uploadNeutre);
 };
