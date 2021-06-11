@@ -2,7 +2,7 @@
 module.exports = {
     HOST: "localhost",
     USER: "root",
-    PASSWORD: "Dg9810761",
+    PASSWORD: "root",
     DB: "capchat",
     PORT: 8889
 };
